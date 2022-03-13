@@ -21,3 +21,15 @@ function operate(op,a,b){
             return null;
     }
 }
+
+let display = document.querySelector('.display');
+let writeToDisplay = str => display.textContent+=str;
+let clearDisplay = () => display.textContent = "";
+
+let keys = document.querySelectorAll(".key");
+
+keys.forEach(key=>{
+    key.addEventListener('click', () =>
+        writeToDisplay(key.textContent)
+    );
+});
