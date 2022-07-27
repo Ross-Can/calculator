@@ -13,30 +13,31 @@
 
 
     <div class="calculator">
-        <h1 class="display">0</h1>
+        <h1 class="display" placeholder="0"></h1>
         <div class="row">
             <button class="key">7</button>
             <button class="key">8</button>
             <button class="key">9</button>
-            <button class="key">/</button>
+            <button class="op-key">/</button>
         </div>
         <div class="row">
             <button class="key">4</button>
             <button class="key">5</button>
             <button class="key">6</button>
-            <button class="key">X</button>
+            <button class="op-key">X</button>
         </div>
         <div class="row">
             <button class="key">1</button>
             <button class="key">2</button>
             <button class="key">3</button>
-            <button class="key">-</button>
+            <button class="op-key">-</button>
         </div>
         <div class="row">
             <button class="key">0</button>
-            <button onclick="clearDisplay();">C</button>
-            <button class="key">+</button>
+            <button id="clear" onclick="clearDisplay();">C</button>
             <button id="equal">=</button>
+            <button class="op-key">+</button>
+
         </div>
     </div>
 
