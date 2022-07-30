@@ -84,6 +84,10 @@ keys.forEach(key=>{
 //Controls for operation keys
 opKeys.forEach(key=>{
     key.addEventListener('click', () =>{
+
+        if(readyForReset){
+            readyForReset = false;
+        }
        
         let op = key.textContent;
         let expression = display.textContent;
@@ -98,6 +102,13 @@ opKeys.forEach(key=>{
         }
         operator = expression.match(/(\+|-|\*|\/)/)[0];
         let nums = expression.split(operator);
+
+        if(nums[1] == 0 && operator == "/"){
+        alert('You cannot divide by 0');
+        clearDisplay();
+        writeToDisplay(nums[0])
+        return;
+    }
 
         let ans = calculate(operator, nums[0],nums[1]) + key.textContent;
         clearDisplay()
