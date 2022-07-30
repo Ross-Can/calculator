@@ -3,7 +3,11 @@ let sub = (a,b) => a-b;
 let mult = (a,b) => a*b;
 let div = (a,b) => a/b;
 
-function operate(op,a,b){
+function calculate(op,aStr,bStr){
+
+    let a = parseInt(aStr);
+    let b = parseInt(bStr);
+
     switch(op){
         case '+':
             return add(a,b);
@@ -29,53 +33,105 @@ let displayStr = "";
 let operand = null;
 let operator = null;
 
+let total = 0;
 
+//Calculator display
 let display = document.querySelector('.display');
+
+//Calculator Key
+let keys = document.querySelectorAll(".key");
+
+//Calculator operation key
+let opKeys = document.querySelectorAll(".op-key");
+
+//Display helper funtions
 let writeToDisplay = str => display.textContent+=str;
 let clearDisplay = () => display.textContent = "";
+let displayCleared = false;
+
 let reset = () =>{
-    operand,operator = null;
-    displayStr="";
-    clearDisplay();
+    if(displayCleared){
+        operand,operator = null;
+        displayCleared = false;
+        return;
+    }
+        displayCleared = true;
+        displayStr="";
+        clearDisplay();   
 };
 
-let keys = document.querySelectorAll(".key");
- 
+let opKeyClicked = false;
+
 keys.forEach(key=>{
     key.addEventListener('click', () =>{
         displayStr += key.textContent;
         writeToDisplay(key.textContent);
+        opKeyClicked =false;
+        
     });
 });
 
 
-
-let opKeys = document.querySelectorAll(".op-key");
 opKeys.forEach(key=>{
     key.addEventListener('click', () =>{
        
-        if(checkForEval()){
-            writeToDisplay(key.textContent);
+        let op = key.textContent;
+        let expression = display.textContent
+
+       
+
+        if(opKeyClicked) return;
+        
+        if(!expression.match(/[0-9]+(\+|-|\/|\*)[0-9]+/)){
+            writeToDisplay(op);
+            displayStr+=op;
+            opKeyClicked = true;
             return;
         }
 
-        operand = parseInt(displayStr.valueOf());
-        displayStr="";
-        operator = key.textContent;
-        writeToDisplay(key.textContent);
+
+        operator = expression.match(/(\+|-|\*|\/)/)[0];
+        let nums = expression.split(operator);
+        console.log(operator)
+        console.log(nums)
+
+        let ans = calculate(operator, nums[0],nums[1]) + key.textContent;
+        clearDisplay()
+        writeToDisplay(ans);
+    
+        displayStr= ans;
+        opKeyClicked = true;
     });
 });
 
+
 let eqKey = document.querySelector("#equal");
 eqKey.addEventListener('click', () =>{
-   let n = parseInt(displayStr.valueOf());
-   if(n == 0 && operator == "/"){
-       alert('You cannot divide by 0');
-       writeToDisplay(displayStr.substring(0, displayStr.length-1));
-       displayStr = "";
-       return;
-   }
-   checkForEval();
+   
+
+    let expression = display.textContent
+
+
+     
+    if(!expression.match(/[0-9]+(\+|-|\/|\*)[0-9]+/)){
+        return;
+    }
+
+
+    operator = expression.match(/(\+|-|\*|\/)/)[0];
+    let nums = expression.split(operator);
+
+    if(nums[1] == 0 && operator == "/"){
+        alert('You cannot divide by 0');
+        clearDisplay();
+        writeToDisplay(displayStr.substring(0, displayStr.length-1));
+        displayStr = "";
+        return;
+    }
+
+    let ans = calculate(operator, nums[0],nums[1]);
+    clearDisplay()
+    writeToDisplay(ans);
 });
 
 
@@ -93,7 +149,7 @@ function checkForEval(){
        return;
    }
 
-    let ans = operate(operator,operand,operand2);
+    let ans = calculate(operator,operand,operand2);
     displayStr = "";
     clearDisplay();
     writeToDisplay(ans);

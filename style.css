@@ -32,9 +32,8 @@ height: 25%;
 width: 85%;
 font-size: 70px;
 color: black;
-overflow-x: scroll;
+overflow: hidden;
 background-color: #CCD1B5;
-
 }
 
 .row{
