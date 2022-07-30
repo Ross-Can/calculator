@@ -49,6 +49,12 @@ let writeToDisplay = str => display.textContent+=str;
 let clearDisplay = () => display.textContent = "";
 let displayCleared = false;
 
+//Stops multiple operations from being writen
+let opKeyClicked = false;
+
+//clears display after equal sign is press followed by a number
+let readyForReset = false;
+
 let reset = () =>{
     if(displayCleared){
         operand,operator = null;
@@ -60,26 +66,28 @@ let reset = () =>{
         clearDisplay();   
 };
 
-let opKeyClicked = false;
 
+//controls for number keys
 keys.forEach(key=>{
     key.addEventListener('click', () =>{
-        displayStr += key.textContent;
+
+        if(readyForReset){
+            clearDisplay();
+            readyForReset = false;
+        }
+
         writeToDisplay(key.textContent);
         opKeyClicked =false;
-        
     });
 });
 
-
+//Controls for operation keys
 opKeys.forEach(key=>{
     key.addEventListener('click', () =>{
        
         let op = key.textContent;
-        let expression = display.textContent
-
-       
-
+        let expression = display.textContent;
+         
         if(opKeyClicked) return;
         
         if(!expression.match(/[0-9]+(\+|-|\/|\*)[0-9]+/)){
@@ -88,12 +96,8 @@ opKeys.forEach(key=>{
             opKeyClicked = true;
             return;
         }
-
-
         operator = expression.match(/(\+|-|\*|\/)/)[0];
         let nums = expression.split(operator);
-        console.log(operator)
-        console.log(nums)
 
         let ans = calculate(operator, nums[0],nums[1]) + key.textContent;
         clearDisplay()
@@ -104,57 +108,26 @@ opKeys.forEach(key=>{
     });
 });
 
-
+//controls for equal key
 let eqKey = document.querySelector("#equal");
 eqKey.addEventListener('click', () =>{
-   
-
-    let expression = display.textContent
-
-
-     
+    let expression = display.textContent;
     if(!expression.match(/[0-9]+(\+|-|\/|\*)[0-9]+/)){
         return;
     }
-
-
     operator = expression.match(/(\+|-|\*|\/)/)[0];
     let nums = expression.split(operator);
 
     if(nums[1] == 0 && operator == "/"){
         alert('You cannot divide by 0');
         clearDisplay();
-        writeToDisplay(displayStr.substring(0, displayStr.length-1));
-        displayStr = "";
+        writeToDisplay(nums[0])
         return;
     }
 
     let ans = calculate(operator, nums[0],nums[1]);
     clearDisplay()
     writeToDisplay(ans);
+
+    readyForReset = true;
 });
-
-
-userEnteredEquation = () => operand != null;
-
-function checkForEval(){
-    if(!userEnteredEquation()) return false;
-
-    let operand2 = parseInt(displayStr);
-
-    if(operand2 == 0 && operator == "/"){
-       alert('You cannot divide by 0');
-       writeToDisplay(displayStr.substring(0, displayStr.length-1));
-       displayStr = "";
-       return;
-   }
-
-    let ans = calculate(operator,operand,operand2);
-    displayStr = "";
-    clearDisplay();
-    writeToDisplay(ans);
-    operand = ans;
-    console.log(operand)
-    
-    return true;
-}
