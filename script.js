@@ -106,6 +106,12 @@ opKeys.forEach(key=>{
         operator = expression.match(/(\+|-|\*|\/)/)[0];
         let nums = expression.split(operator);
 
+        //in case there are multiuple negative signs causing an array of three instead of 2
+        if(nums.length > 2){
+            nums[0] = "";
+            nums[1] = nums[1] + "-" + nums[2];
+        }
+    
         if(nums[0].length == 0){
             operator = nums[1].match(/(\+|-|\*|\/)/)[0];
             nums = nums[1].split(operator);
@@ -140,7 +146,12 @@ eqKey.addEventListener('click', () =>{
     operator = expression.match(/(\+|-|\*|\/)/)[0];
     let nums = expression.split(operator);
 
-    console.log(nums)
+
+     //in case there are multiuple negative signs causing an array of three instead of 2
+     if(nums.length > 2){
+        nums[0] = "";
+        nums[1] = nums[1] + "-" + nums[2];
+    }
 
     if(nums[0].length == 0){
         operator = nums[1].match(/(\+|-|\*|\/)/)[0];
