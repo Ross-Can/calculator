@@ -94,14 +94,24 @@ opKeys.forEach(key=>{
          
         if(opKeyClicked) return;
         
-        if(!expression.match(/[0-9]+(\+|-|\/|\*)[0-9]+/)){
+        if(!expression.match(/^-*[0-9]+(\+|-|\/|\*)[0-9]+$/)){
             writeToDisplay(op);
             displayStr+=op;
             opKeyClicked = true;
             return;
         }
+
+        
+
         operator = expression.match(/(\+|-|\*|\/)/)[0];
         let nums = expression.split(operator);
+
+        if(nums[0].length == 0){
+            operator = nums[1].match(/(\+|-|\*|\/)/)[0];
+            nums = nums[1].split(operator);
+            nums[0] = "-" + nums[0];
+        }
+       
 
         if(nums[1] == 0 && operator == "/"){
         alert('You cannot divide by 0');
@@ -123,11 +133,21 @@ opKeys.forEach(key=>{
 let eqKey = document.querySelector("#equal");
 eqKey.addEventListener('click', () =>{
     let expression = display.textContent;
-    if(!expression.match(/[0-9]+(\+|-|\/|\*)[0-9]+/)){
+    if(!expression.match(/^-*[0-9]+(\+|-|\/|\*)[0-9]+$/)){
+        alert("Please enter a valid format of expression")
         return;
     }
     operator = expression.match(/(\+|-|\*|\/)/)[0];
     let nums = expression.split(operator);
+
+    console.log(nums)
+
+    if(nums[0].length == 0){
+        operator = nums[1].match(/(\+|-|\*|\/)/)[0];
+        nums = nums[1].split(operator);
+        nums[0] = "-" + nums[0];
+    }
+    
 
     if(nums[1] == 0 && operator == "/"){
         alert('You cannot divide by 0');
